@@ -24,8 +24,7 @@ require 'rails_helper'
 # `rails-controller-testing` gem.
 
 RSpec.describe EventsController, type: :controller do
-
-  before(:each) { stub_const('SLACK_TOKEN', 'secret')}
+  before { stub_const('SLACK_TOKEN', 'secret') }
   # This should return the minimal set of attributes required to create a valid
   # Event. As you add validations to Event, be sure to
   # adjust the attributes here as well.
@@ -36,7 +35,7 @@ RSpec.describe EventsController, type: :controller do
       type: 'url_verification'
     }
   end
-  let(:invalid_params) {{ hello: 'world', token: 'secret' } }
+  let(:invalid_params) { { hello: 'world', token: 'secret' } }
   let(:unauthorized_params) do
     {
       token: 'fake_token',
@@ -45,45 +44,36 @@ RSpec.describe EventsController, type: :controller do
     }
   end
 
-  describe "POST #create" do
-    context "with valid params" do
-      before(:each) { post :create, params: valid_params }
-      subject { response}
+  describe 'POST #create' do
+    context 'with valid params' do
+      before { post :create, params: valid_params }
+      let(:response_body) { JSON.parse(response.body) }
 
-      it { is_expected.to have_http_status(:ok) }
+      it { expect(response).to have_http_status(:ok) }
 
-      it "renders a JSON response" do
-        expect(response.content_type).to eq('application/json')
-      end
+      it { expect(response.content_type).to eq('application/json') }
 
-      describe "subject.body" do
-        subject {JSON.parse(response.body)}
-        it { is_expected.to eq( {'challenge' => '3eZbrw1aBm2rZgRNFdxV2595E9CY3gmdALWMmHkvFXO7tYXAYM8P'})}
-      end
-
+      it {
+        expect(response_body).to eq(
+          'challenge' => '3eZbrw1aBm2rZgRNFdxV2595E9CY3gmdALWMmHkvFXO7tYXAYM8P'
+        )
+      }
     end
 
-    context "with invalid params" do
-      before(:each) { post :create, params: invalid_params }
-      subject { response }
+    context 'with invalid params' do
+      before { post :create, params: invalid_params }
 
-      it { is_expected.to have_http_status(:unprocessable_entity)}
+      it { expect(response).to have_http_status(:unprocessable_entity) }
 
-      it "renders a JSON response" do
-        expect(response.content_type).to eq('application/json')
-      end
+      it { expect(response.content_type).to eq('application/json') }
     end
 
-    context "with unauthorized request" do
-      before(:each) { post :create, params: unauthorized_params}
-      subject { response }
+    context 'with unauthorized request' do
+      before { post :create, params: unauthorized_params }
 
-      it { is_expected.to have_http_status(:unauthorized)}
+      it { expect(response).to have_http_status(:unauthorized) }
 
-      it "renders a JSON response" do
-        expect(response.content_type).to eq('application/json')
-      end
+      it { expect(response.content_type).to eq('application/json') }
     end
   end
-
 end

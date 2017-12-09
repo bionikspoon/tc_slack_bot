@@ -1,0 +1,17 @@
+require: rubocop-rspec
+inherit_from: .rubocop_todo.yml
+AllCops:
+  Include:
+    - Rakefile
+    - config.ru
+    - lib/**/*.rake
+  Exclude:
+    - db/schema.rb
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+Metrics/LineLength:
+  IgnoredPatterns: ['\A\s*#']
+Naming/FileName:
+  Exclude:
+    - 'Gemfile'

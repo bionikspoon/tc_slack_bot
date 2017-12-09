@@ -8,20 +8,23 @@ class EventsController < ApplicationController
   end
 
   private
-    def authorize!
-      if params.require(:token) != SLACK_TOKEN
-        render json: {error: 'unauthorized'}, status: :unauthorized
-      end
-    end
-    def accept_action!
-      if event_params[:type] !='url_verification'
-        render json: {error: 'unprocessable_entity'}, status: :unprocessable_entity
-      end
-    end
 
+  def authorize!
+    json = { error: 'unauthorized' }
+    invalid_token = params.require(:token) != SLACK_TOKEN
 
-    # Only allow a trusted parameter "white list" through.
-    def event_params
-      params.permit(:challenge, :type, :token)
-    end
+    render json: json, status: :unauthorized if invalid_token
+  end
+
+  def accept_action!
+    json = { error: 'unprocessable_entity' }
+    invalid_type = event_params[:type] != 'url_verification'
+
+    render json: json, status: :unprocessable_entity if invalid_type
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def event_params
+    params.permit(:challenge, :type, :token)
+  end
 end
