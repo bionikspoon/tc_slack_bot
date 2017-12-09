@@ -7,6 +7,7 @@ AllCops:
     - lib/**/*.rake
   Exclude:
     - db/schema.rb
+    - bin/**/*
 Metrics/BlockLength:
   Exclude:
     - 'spec/**/*'
