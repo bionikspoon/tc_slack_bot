@@ -3,16 +3,23 @@ inherit_from: .rubocop_todo.yml
 AllCops:
   Include:
     - Rakefile
+    - Guardfile
     - config.ru
     - lib/**/*.rake
   Exclude:
     - db/schema.rb
     - bin/**/*
-Metrics/BlockLength:
-  Exclude:
-    - 'spec/**/*'
 Metrics/LineLength:
   IgnoredPatterns: ['\A\s*#']
 Naming/FileName:
   Exclude:
     - 'Gemfile'
+    - 'Guardfile'
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+  ExcludedMethods:
+    - guard
+    - describe
+Style/ClassAndModuleChildren:
+  EnforcedStyle: compact
