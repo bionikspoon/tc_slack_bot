@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Action::Unknown < Trailblazer::Operation
   step :handle!
   failure :handle_unknown!
