@@ -10,6 +10,6 @@ class Action::Unknown < Trailblazer::Operation
 
   def handle_unknown!(options, *)
     options[:status] = :unprocessable_entity
-    options[:json] = { error: 'unprocessable_entity!' }
+    options[:json] = { error: :unprocessable_entity }
   end
 end

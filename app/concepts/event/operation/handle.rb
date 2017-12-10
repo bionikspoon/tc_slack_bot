@@ -11,7 +11,7 @@ class Event::Handle < Trailblazer::Operation
 
   def handle_unauthorized!(options, *)
     options[:status] = :unauthorized
-    options[:json] = { error: 'unauthorized' }
+    options[:json] = { error: :unauthorized }
   end
 
   def dispatch!(_options, params:, **)

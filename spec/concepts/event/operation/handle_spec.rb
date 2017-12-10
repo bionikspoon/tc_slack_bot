@@ -7,8 +7,6 @@ describe Event::Handle do
 
   subject { described_class.call(params) }
 
-  let(:status) { subject[:status] }
-
   describe 'challenge' do
     context 'with valid params' do
       let(:params) do
@@ -28,7 +26,7 @@ describe Event::Handle do
       end
 
       it { is_expected.to be_failure }
-      it { expect(status).to eq :unprocessable_entity }
+      its([:status]) { is_expected.to eq :unprocessable_entity }
     end
 
     context 'with unauthorized params' do
@@ -41,48 +39,42 @@ describe Event::Handle do
       end
 
       it { is_expected.to be_failure }
-      it { expect(status).to eq :unauthorized }
+      its([:status]) { is_expected.to eq :unauthorized }
     end
   end
 
   describe 'link_shared' do
-    let(:json) do
-      <<~HEREDOC
-        {
-          "token": "secret",
-          "team_id": "TXXXXXXXX",
-          "api_app_id": "AXXXXXXXXX",
-          "event": {
-              "type": "link_shared",
-              "channel": "Cxxxxxx",
-              "user": "Uxxxxxxx",
-              "message_ts": "123456789.9875",
-              "links": [
-                  {
-                      "domain": "example.com",
-                      "url": "https://example.com/12345"
-                  },
-                  {
-                      "domain": "example.com",
-                      "url": "https://example.com/67890"
-                  },
-                  {
-                      "domain": "another-example.com",
-                      "url": "https://yet.another-example.com/v/abcde"
-                  }
-              ]
-          },
-          "type": "event_callback",
-          "authed_users": [
-              "UXXXXXXX1",
-              "UXXXXXXX2"
-          ],
-          "event_id": "Ev08MFMKH6",
-          "event_time": 123456789
-        }
-      HEREDOC
+    let(:params) do
+      {
+        token: 'secret',
+        team_id: 'TXXXXXXXX',
+        api_app_id: 'AXXXXXXXXX',
+        event: {
+          type: 'link_shared',
+          channel: 'Cxxxxxx',
+          user: 'Uxxxxxxx',
+          message_ts: '123456789.9875',
+          links: [
+            {
+              domain: 'example.com',
+              url: 'https://example.com/12345'
+            },
+            {
+              domain: 'example.com',
+              url: 'https://example.com/67890'
+            },
+            {
+              domain: 'another-example.com',
+              url: 'https://yet.another-example.com/v/abcde'
+            }
+          ]
+        },
+        type: 'event_callback',
+        authed_users: %w[UXXXXXXX1 UXXXXXXX2],
+        event_id: 'Ev08MFMKH6',
+        event_time: 123_456_789
+      }
     end
-    let(:params) { JSON.parse(json, symbolize_names: true) }
 
     it { is_expected.to be_success }
   end

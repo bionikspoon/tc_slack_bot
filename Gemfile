@@ -26,6 +26,7 @@ gem 'puma', '~> 3.7'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'
 
+gem 'httparty'
 gem 'trailblazer'
 gem 'trailblazer-rails'
 
@@ -34,6 +35,7 @@ group :development, :test do
   gem 'awesome_print'
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'pry-rails'
+  gem 'rspec-its'
   gem 'rspec-rails'
 end
 
