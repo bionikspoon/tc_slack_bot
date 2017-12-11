@@ -4,27 +4,23 @@ require 'rails_helper'
 
 describe Action::LinkShared do
   let(:params) do
-    {
-      token: 'secret',
-      event: {
-        channel: 'Cxxxxxx',
-        message_ts: '123456789.9875',
-        links: [
-          {
-            domain: 'example.com',
-            url: 'https://example.com/12345'
-          },
-          {
-            domain: 'example.com',
-            url: 'https://example.com/67890'
-          },
-          {
-            domain: 'another-example.com',
-            url: 'https://yet.another-example.com/v/abcde'
-          }
-        ]
-      }
-    }
+    ActionController::Parameters.new(token: 'secret',
+                                     event: ActionController::Parameters.new(channel: 'Cxxxxxx',
+                                                                             message_ts: '123456789.9875',
+                                                                             links: [
+                                                                               {
+                                                                                 domain: 'example.com',
+                                                                                 url: 'https://example.com/12345'
+                                                                               },
+                                                                               {
+                                                                                 domain: 'example.com',
+                                                                                 url: 'https://example.com/67890'
+                                                                               },
+                                                                               {
+                                                                                 domain: 'another-example.com',
+                                                                                 url: 'https://yet.another-example.com/v/abcde'
+                                                                               }
+                                                                             ]))
   end
 
   context 'with subject' do
@@ -37,26 +33,25 @@ describe Action::LinkShared do
 
   it 'queues all urls' do
     expect(UnfurlLinkJob).to receive(:perform_later).with(
-      token: 'secret',
       channel: 'Cxxxxxx',
       ts: '123456789.9875',
-      domain: 'example.com',
-      url: 'https://example.com/12345'
+      links: [
+        {
+          domain: 'example.com',
+          url: 'https://example.com/12345'
+        },
+        {
+          domain: 'example.com',
+          url: 'https://example.com/67890'
+        },
+        {
+          domain: 'another-example.com',
+          url: 'https://yet.another-example.com/v/abcde'
+        }
+      ]
+
     )
-    expect(UnfurlLinkJob).to receive(:perform_later).with(
-      token: 'secret',
-      channel: 'Cxxxxxx',
-      ts: '123456789.9875',
-      domain: 'example.com',
-      url: 'https://example.com/67890'
-    )
-    expect(UnfurlLinkJob).to receive(:perform_later).with(
-      token: 'secret',
-      channel: 'Cxxxxxx',
-      ts: '123456789.9875',
-      domain: 'another-example.com',
-      url: 'https://yet.another-example.com/v/abcde'
-    )
+
     described_class.call(params)
   end
 end

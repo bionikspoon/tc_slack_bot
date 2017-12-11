@@ -5,15 +5,12 @@ class Action::LinkShared < Trailblazer::Operation
   step :handle!
 
   def queue!(_options, params:, **)
-    params.dig(:event, :links).each do |link|
-      UnfurlLinkJob.perform_later(
-        token: params[:token],
-        channel: params.dig(:event, :channel),
-        ts: params.dig(:event, :message_ts),
-        domain: link[:domain],
-        url: link[:url]
-      )
-    end
+    UnfurlLinkJob.perform_later(
+      channel: params.require(:event).require(:channel),
+      ts: params.require(:event).require(:message_ts),
+      links: params.require(:event).permit(links: %i[domain url])
+        .to_h.deep_symbolize_keys[:links]
+    )
   end
 
   def handle!(options, *)

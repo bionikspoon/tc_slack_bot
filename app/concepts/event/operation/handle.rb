@@ -6,7 +6,7 @@ class Event::Handle < Trailblazer::Operation
   step Nested(:dispatch!)
 
   def authorize!(_options, params:, **)
-    params[:token] == SLACK_TOKEN
+    params.require(:token) == SLACK_TOKEN
   end
 
   def handle_unauthorized!(options, *)
@@ -15,7 +15,7 @@ class Event::Handle < Trailblazer::Operation
   end
 
   def dispatch!(_options, params:, **)
-    case params[:type]
+    case params.require(:type)
     when 'url_verification'
       Action::Challenge
     when 'event_callback'
@@ -23,12 +23,14 @@ class Event::Handle < Trailblazer::Operation
     else
       Action::Unknown
     end
+  rescue ActionController::ParameterMissing
+    Action::Unknown
   end
 
   private
 
   def dispatch_event_callback(params)
-    case params.dig(:event, :type)
+    case params.require(:event).require(:type)
     when 'link_shared'
       Action::LinkShared
     else

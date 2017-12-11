@@ -5,7 +5,7 @@ require 'rails_helper'
 describe Action::Challenge do
   subject { described_class.call(params) }
 
-  let(:params) { { challenge: 'abcd' } }
+  let(:params) { ActionController::Parameters.new(challenge: 'abcd') }
 
   it { is_expected.to be_success }
   its([:json]) { is_expected.to eq(challenge: 'abcd') }
