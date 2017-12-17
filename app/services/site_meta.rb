@@ -10,6 +10,12 @@ class SiteMeta
         .merge(favicon(doc))
     end
 
+    def from_url(url)
+      response = HTTParty.get(url)
+
+      call(response.body)
+    end
+
     private
 
     def open_graph_props(doc)
