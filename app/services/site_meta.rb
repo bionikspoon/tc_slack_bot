@@ -5,7 +5,8 @@ class SiteMeta
     def call(html)
       doc = Nokogiri::HTML(html)
 
-      open_graph_props(doc)
+      {}
+        .merge(open_graph_props(doc))
         .merge(favicon(doc))
     end
 
@@ -21,9 +22,10 @@ class SiteMeta
     end
 
     def favicon(doc)
-      tag_hash = doc.css('link[rel=icon]').first.to_h.symbolize_keys
+      uri = URI(doc.css('meta[property="og:url"]').first.attributes['content'].value)
+      uri.path = '/favicon.ico'
 
-      { favicon: tag_hash[:href] }
+      { favicon: uri.to_s }
     end
   end
 end
