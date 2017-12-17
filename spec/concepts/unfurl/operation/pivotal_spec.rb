@@ -46,8 +46,8 @@ describe Unfurl::Pivotal do
 
     let(:unfurl) do
       {
-        author_icon: 'https://pivotaltracker.com/favicon.ico',
-        author_name: 'Pivotal',
+        footer_icon: 'https://pivotaltracker.com/favicon.ico',
+        footer: 'Pivotal',
         color: 'e0e2e5',
         mrkdwn_in: %i[text fields],
         text: 'Really need this story to test things',

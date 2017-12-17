@@ -24,19 +24,24 @@ class Unfurl::Github < Trailblazer::Operation
 
   def private_pr_meta(owner, repo, number)
     meta = API::Github.pr(owner, repo, number)
-    title = "[#{meta[:state]}] #{meta[:title]} · Pull Request #{meta[:number]} · #{meta.dig(:head, :repo, :full_name)}"
+    title = "#{meta[:title]} · Pull Request #{meta[:number]} · #{meta.dig(:head, :repo, :full_name)}"
     changes = "+#{meta[:additions]} / -#{meta[:deletions]} / #{meta[:changed_files]} #{'file'.pluralize(meta[:changed_files])}"
-    fields = [
-      { title: 'Changes', value: changes, short: true },
-      { title: 'Branch', value: "`#{meta.dig(:head, :ref)}`", short: true }
-    ]
+    fields = []
+
+    if meta[:state] == 'open'
+      fields << { title: 'Changes', value: changes, short: true }
+      fields << { title: 'Branch', value: "`#{meta.dig(:head, :ref)}`", short: true }
+    end
 
     if owner.casecmp('thinkcerca').zero?
-      fields << {
-        title: 'Pivotal',
-        value: pivotal_stories(meta[:title]).join("\n"),
-        short: false
-      }
+      stories = pivotal_stories(meta[:title])
+      if stories.count.positive?
+        fields << {
+          title: 'Pivotal',
+          value: stories.join("\n"),
+          short: false
+        }
+      end
     end
 
     {
@@ -50,12 +55,26 @@ class Unfurl::Github < Trailblazer::Operation
       text: meta[:body],
       title_link: meta[:html_url],
       title: title,
-      fields: fields
+      fields: fields,
+      color: pr_color(meta)
     }
   end
 
   def pivotal_stories(title)
     title.scan(/[^#]*#(\d+)(?=[,\]\s])/).map { |story| "https://pivotaltracker.com/story/show/#{story[0]}" }
+  end
+
+  def pr_color(meta)
+    if meta[:merged]
+      '6f42c1'
+    else
+      case meta[:state]
+      when 'open'
+        '2cbe4e'
+      when 'closed'
+        'cb2431'
+      end
+    end
   end
 
   def public_url_meta(url)

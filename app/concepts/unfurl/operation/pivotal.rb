@@ -30,8 +30,8 @@ class Unfurl::Pivotal < Trailblazer::Operation
     end
 
     {
-      author_icon: 'https://pivotaltracker.com/favicon.ico',
-      author_name: 'Pivotal',
+      footer_icon: 'https://pivotaltracker.com/favicon.ico',
+      footer: 'Pivotal',
       mrkdwn_in: %i[text fields],
       text: meta[:description],
       title_link: meta[:url],
