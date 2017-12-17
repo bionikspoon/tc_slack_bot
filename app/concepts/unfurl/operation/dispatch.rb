@@ -1,45 +1,59 @@
 # frozen_string_literal: true
 
 class Unfurl::Dispatch < Trailblazer::Operation
-  # step Nested(:dispatch!)
-  step :do_everything!
+  step :unfurl_each!
+  step :process_unfurls!
+  step :set_body!
+  step :update_slack!
 
-  def dispatch!(_options, params:, **)
-    case params[:domain]
-    when 'github.com'
-      Unfurl::Github
-    when 'pivotaltracker.com'
-      Unfurl::Pivotal
-    else
-      Unfurl::Unknown
+  # def dispatch!(_options, params:, **)
+  #   case params[:domain]
+  #   when 'github.com'
+  #     Unfurl::Github
+  #   when 'pivotaltracker.com'
+  #     Unfurl::Pivotal
+  #   else
+  #     Unfurl::Unknown
+  #   end
+  # end
+
+  def unfurl_each!(options, params:, **)
+    options[:unfurl_pairs] = params[:links].map do |link|
+      [
+        link[:url],
+        dispatch(link)
+      ]
     end
   end
 
-  def do_everything!(_options, params:, **)
-    unfurls_pairs = params[:links].map do |link|
-      [
-        link[:url],
-        {
-          text: 'Every day is the test.'
-        }
-      ]
-    end
-    unfurls = unfurls_pairs.to_h
+  def process_unfurls!(options, unfurl_pairs:, **)
+    options[:unfurls] = unfurl_pairs.map do |key, result|
+      [key, result[:unfurl]]
+    end.to_h.symbolize_keys
+  end
 
-    headers = {
-      'Authorization' => "Bearer #{SLACK_OAUTH_TOKEN}",
-      'Content-Type' => 'application/json; charset=utf-8'
-    }
-
-    body = {
+  def set_body!(options, unfurls:, params:, **)
+    options[:body] = {
       channel: params[:channel],
       ts: params[:ts],
       unfurls: unfurls
     }
-    API::Slack.post(
-      '/chat.unfurl',
-      headers: headers,
-      body: body.to_json
-    )
+  end
+
+  def update_slack!(_options, body:, **)
+    API::Slack.unfurl(body)
+  end
+
+  private
+
+  def dispatch(url:, domain:)
+    case domain
+    when 'github.com'
+      Unfurl::Github.call(url: url)
+    when 'pivotaltracker.com'
+      Unfurl::Pivotal.call(url: url)
+    else
+      Unfurl::Unknown.call(url: url)
+    end
   end
 end

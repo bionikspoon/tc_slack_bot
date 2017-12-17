@@ -3,7 +3,7 @@
 class Unfurl::Github < Trailblazer::Operation
   step :handle!
 
-  def handle!(_options, *)
-    true
+  def handle!(options, *)
+    options[:unfurl] = { text: 'Every day is the test.' }
   end
 end

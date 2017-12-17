@@ -3,28 +3,38 @@
 require 'rails_helper'
 
 describe Unfurl::Dispatch do
-  describe 'dispatch!' do
-    subject do
-      op = described_class.new
-      op.dispatch!(op, params: params)
-    end
+  let(:params) do
+    {
+      channel: 'C123456',
+      ts: '123456789.9875',
+      links: [
+        {
+          domain: 'github.com',
+          url: 'https://github.com/ThinkCERCA/thinkCERCA/pull/1'
+        },
+        {
+          domain: 'github.com',
+          url: 'https://github.com/ThinkCERCA/thinkCERCA/pull/2'
+        }
+      ]
+    }
+  end
 
-    context 'with pivotal domain' do
-      let(:params) { { domain: 'pivotaltracker.com' } }
+  it 'sends a request with params' do
+    body = {
+      channel: 'C123456',
+      ts: '123456789.9875',
+      unfurls: {
+        'https://github.com/ThinkCERCA/thinkCERCA/pull/1': {
+          text: 'Every day is the test.'
+        },
+        'https://github.com/ThinkCERCA/thinkCERCA/pull/2': {
+          text: 'Every day is the test.'
+        }
+      }
+    }
 
-      it { is_expected.to eq Unfurl::Pivotal }
-    end
-
-    context 'with github domain' do
-      let(:params) { { domain: 'github.com' } }
-
-      it { is_expected.to eq Unfurl::Github }
-    end
-
-    context 'with unknown domain' do
-      let(:params) { { domain: 'example.com' } }
-
-      it { is_expected.to eq Unfurl::Unknown }
-    end
+    expect(API::Slack).to receive(:unfurl).with(body)
+    described_class.call(params)
   end
 end
