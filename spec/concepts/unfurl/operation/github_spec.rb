@@ -51,7 +51,7 @@ describe Unfurl::Github do
         fallback: '[open] More grades: New School class [#153636648] · Pull Request 3813 · ThinkCERCA/thinkCERCA',
         footer: 'Github',
         footer_icon: 'https://github.com/favicon.ico',
-        mrkdwn_in: %i[text fields pretext],
+        mrkdwn_in: %i[text fields],
         text: 'I like turtles.',
         title: '[open] More grades: New School class [#153636648] · Pull Request 3813 · ThinkCERCA/thinkCERCA',
         title_link: 'https://github.com/ThinkCERCA/thinkCERCA/pull/3813',

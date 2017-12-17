@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class Unfurl::Github < Trailblazer::Operation
-  step :do_everything!
+  step :handle!
 
-  def do_everything!(options, params:, **)
+  def handle!(options, params:, **)
     options[:unfurl] = get_unfurl(params[:url])
   end
 
@@ -46,7 +46,7 @@ class Unfurl::Github < Trailblazer::Operation
       fallback: title,
       footer_icon: 'https://github.com/favicon.ico',
       footer: 'Github',
-      mrkdwn_in: %i[text fields pretext],
+      mrkdwn_in: %i[text fields],
       text: meta[:body],
       title_link: meta[:html_url],
       title: title,

@@ -7,14 +7,13 @@ class API::Github
 
   class << self
     def pr(owner, repo, pr)
-      response = get("/repos/#{owner}/#{repo}/pulls/#{pr}", headers: headers)
+      _get("/repos/#{owner}/#{repo}/pulls/#{pr}")
+    end
 
-      case response.code
-      when 200
-        JSON.parse(response.to_json).deep_symbolize_keys
-      else
-        { error: JSON.parse(response.to_json).deep_symbolize_keys }
-      end
+    def _get(*args, **kwargs)
+      response = get(*args, headers: headers, **kwargs)
+
+      JSON.parse(response.to_json, symbolize_names: true)
     end
 
     private

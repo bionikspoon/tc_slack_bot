@@ -18,11 +18,11 @@ describe API::Github, type: :services do
   end
 
   it 'sends post with params' do
-    response = double(code: 200, to_json: '{}')
     expect(API::Github).to receive(:get).with(
       '/repos/thinkCERCA/thinkCERCA/pulls/1',
       headers: headers
-    ).and_return(response)
+    ).and_return(double(to_json: '{}'))
+
     API::Github.pr('thinkCERCA', 'thinkCERCA', 1)
   end
 end
