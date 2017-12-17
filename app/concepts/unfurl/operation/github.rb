@@ -24,13 +24,20 @@ class Unfurl::Github < Trailblazer::Operation
 
   def private_pr_meta(owner, repo, number)
     meta = API::Github.pr(owner, repo, number)
-    title = "#{meta[:title]} · Pull Request #{meta[:number]} · #{meta.dig(:head, :repo, :full_name)}"
+    title = "[#{meta[:state]}] #{meta[:title]} · Pull Request #{meta[:number]} · #{meta.dig(:head, :repo, :full_name)}"
     changes = "+#{meta[:additions]} / -#{meta[:deletions]} / #{meta[:changed_files]} #{'file'.pluralize(meta[:changed_files])}"
     fields = [
       { title: 'Changes', value: changes, short: true },
-      { title: 'Branch', value: "`#{meta.dig(:head, :ref)}`", short: true },
-      { title: 'Status', value: meta[:state], short: true }
+      { title: 'Branch', value: "`#{meta.dig(:head, :ref)}`", short: true }
     ]
+
+    if owner.casecmp('thinkcerca').zero?
+      fields << {
+        title: 'Pivotal',
+        value: pivotal_stories(meta[:title]).join("\n"),
+        short: false
+      }
+    end
 
     {
       author_icon: meta.dig(:user, :avatar_url),
@@ -45,6 +52,10 @@ class Unfurl::Github < Trailblazer::Operation
       title: title,
       fields: fields
     }
+  end
+
+  def pivotal_stories(title)
+    title.scan(/[^#]*#(\d+)(?=[,\]\s])/).map { |story| "https://pivotaltracker.com/story/show/#{story[0]}" }
   end
 
   def public_url_meta(url)

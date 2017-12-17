@@ -48,17 +48,17 @@ describe Unfurl::Github do
         author_icon: 'https://avatars3.githubusercontent.com/u/5052422?v=4',
         author_link: 'https://github.com/bionikspoon',
         author_name: 'bionikspoon',
-        fallback: 'More grades: New School class [#153636648] · Pull Request 3813 · ThinkCERCA/thinkCERCA',
+        fallback: '[open] More grades: New School class [#153636648] · Pull Request 3813 · ThinkCERCA/thinkCERCA',
         footer: 'Github',
         footer_icon: 'https://github.com/favicon.ico',
         mrkdwn_in: %i[text fields pretext],
         text: 'I like turtles.',
-        title: 'More grades: New School class [#153636648] · Pull Request 3813 · ThinkCERCA/thinkCERCA',
+        title: '[open] More grades: New School class [#153636648] · Pull Request 3813 · ThinkCERCA/thinkCERCA',
         title_link: 'https://github.com/ThinkCERCA/thinkCERCA/pull/3813',
         fields: [
           { title: 'Changes', value: '+3 / -1 / 1 file', short: true },
           { title: 'Branch', value: '`153636648_grades__new_class`', short: true },
-          { title: 'Status', value: 'open', short: true }
+          { title: 'Pivotal', value: 'https://pivotaltracker.com/story/show/153636648', short: false }
         ]
       }
     end
