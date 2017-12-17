@@ -6,17 +6,6 @@ class Unfurl::Dispatch < Trailblazer::Operation
   step :set_body!
   step :update_slack!
 
-  # def dispatch!(_options, params:, **)
-  #   case params[:domain]
-  #   when 'github.com'
-  #     Unfurl::Github
-  #   when 'pivotaltracker.com'
-  #     Unfurl::Pivotal
-  #   else
-  #     Unfurl::Unknown
-  #   end
-  # end
-
   def unfurl_each!(options, params:, **)
     options[:unfurl_pairs] = params[:links].map do |link|
       [

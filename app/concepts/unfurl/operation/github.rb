@@ -4,39 +4,59 @@ class Unfurl::Github < Trailblazer::Operation
   step :do_everything!
 
   def do_everything!(options, params:, **)
-    pr = pull(params[:url])
-
-    options[:unfurl] = if pr.nil?
-                         get_public_url_meta(params[:url])
-                       else
-                         get_pr_meta(pr)
-                       end
+    options[:unfurl] = get_unfurl(params[:url])
   end
 
   private
 
-  def pull(url)
-    uri = URI(url)
-    match = %r{/ThinkCERCA/thinkCERCA/pull/(\d+)}.match(uri.path)
-    match[1] unless match.nil?
+  def get_unfurl(url)
+    case URI(url).path
+    when %r{/(?<owner>.+)/(?<repo>.+)/pull/(?<number>\d+)}i
+      private_pr_meta(
+        $LAST_MATCH_INFO['owner'],
+        $LAST_MATCH_INFO['repo'],
+        $LAST_MATCH_INFO['number']
+      )
+    else
+      public_url_meta(url)
+    end
   end
 
-  def get_pr_meta(_pr)
+  def private_pr_meta(owner, repo, number)
+    meta = API::Github.pr(owner, repo, number)
+    title = "#{meta[:title]} · Pull Request #{meta[:number]} · #{meta.dig(:head, :repo, :full_name)}"
+    changes = "+#{meta[:additions]} / -#{meta[:deletions]} / #{meta[:changed_files]} #{'file'.pluralize(meta[:changed_files])}"
+    fields = [
+      { title: 'Changes', value: changes, short: true },
+      { title: 'Branch', value: "`#{meta.dig(:head, :ref)}`", short: true },
+      { title: 'Status', value: meta[:state], short: true }
+    ]
+
     {
-      text: 'Every day is the test.'
+      author_icon: meta.dig(:user, :avatar_url),
+      author_link: meta.dig(:user, :html_url),
+      author_name: meta.dig(:user, :login),
+      fallback: title,
+      footer_icon: 'https://github.com/favicon.ico',
+      footer: 'Github',
+      mrkdwn_in: %i[text fields pretext],
+      text: meta[:body],
+      title_link: meta[:html_url],
+      title: title,
+      fields: fields
     }
   end
 
-  def get_public_url_meta(url)
+  def public_url_meta(url)
     meta = SiteMeta.from_url(url)
 
-    meta.merge(
-      title_link: meta[:url],
+    {
+      footer_icon: meta[:favicon],
+      footer: meta[:site_name],
       text: meta[:description],
       thumb_url: meta[:image],
-      author_name: meta[:site_name],
-      author_link: meta[:url],
-      author_icon: meta[:favicon]
-    )
+      title_link: meta[:url],
+      title: meta[:title]
+    }
   end
 end

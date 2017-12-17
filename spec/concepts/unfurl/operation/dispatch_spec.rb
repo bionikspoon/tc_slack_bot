@@ -33,6 +33,8 @@ describe Unfurl::Dispatch do
         }
       }
     }
+    unfurl = { text: 'Every day is the test.' }
+    allow(Unfurl::Github).to receive(:call).and_return(unfurl: unfurl)
 
     expect(API::Slack).to receive(:unfurl).with(body)
     described_class.call(params)
