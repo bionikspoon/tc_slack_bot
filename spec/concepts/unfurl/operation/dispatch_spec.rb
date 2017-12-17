@@ -19,9 +19,8 @@ describe Unfurl::Dispatch do
       ]
     }
   end
-
-  it 'sends a request with params' do
-    body = {
+  let(:body) do
+    {
       channel: 'C123456',
       ts: '123456789.9875',
       unfurls: {
@@ -33,10 +32,13 @@ describe Unfurl::Dispatch do
         }
       }
     }
-    unfurl = { text: 'Every day is the test.' }
-    allow(Unfurl::Github).to receive(:call).and_return(unfurl: unfurl)
+  end
 
+  let(:link_unfurl) { { unfurl: { text: 'Every day is the test.' } } }
+
+  before { allow(Unfurl::Github).to receive(:call).and_return(link_unfurl) }
+  after { described_class.call(params) }
+  it 'sends a request with params' do
     expect(API::Slack).to receive(:unfurl).with(body)
-    described_class.call(params)
   end
 end

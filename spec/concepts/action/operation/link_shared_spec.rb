@@ -28,32 +28,39 @@ describe Action::LinkShared do
   context 'with subject' do
     subject { described_class.call(params) }
 
+    before { allow(UnfurlLinkJob).to receive(:perform_later) }
+
     it { is_expected.to be_success }
     its([:json]) { is_expected.to eq(status: :ok) }
     its([:status]) { is_expected.to eq :ok }
   end
 
-  it 'queues all urls' do
-    expect(UnfurlLinkJob).to receive(:perform_later).with(
-      channel: 'Cxxxxxx',
-      ts: '123456789.9875',
-      links: [
-        {
-          domain: 'example.com',
-          url: 'https://example.com/12345'
-        },
-        {
-          domain: 'example.com',
-          url: 'https://example.com/67890'
-        },
-        {
-          domain: 'another-example.com',
-          url: 'https://yet.another-example.com/v/abcde'
-        }
-      ]
+  context 'with UnfurlLinkJob mock' do
+    after { described_class.call(params) }
 
-    )
+    let(:job_params) do
+      {
+        channel: 'Cxxxxxx',
+        ts: '123456789.9875',
+        links: [
+          {
+            domain: 'example.com',
+            url: 'https://example.com/12345'
+          },
+          {
+            domain: 'example.com',
+            url: 'https://example.com/67890'
+          },
+          {
+            domain: 'another-example.com',
+            url: 'https://yet.another-example.com/v/abcde'
+          }
+        ]
+      }
+    end
 
-    described_class.call(params)
+    it 'queues all urls' do
+      expect(UnfurlLinkJob).to receive(:perform_later).with(job_params)
+    end
   end
 end

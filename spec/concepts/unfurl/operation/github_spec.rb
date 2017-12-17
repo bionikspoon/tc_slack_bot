@@ -41,7 +41,7 @@ describe Unfurl::Github do
   context 'with private pr' do
     subject { described_class.call(url: url) }
 
-    before { allow(API::Github).to receive(:pr).and_return(JSON.parse(json).deep_symbolize_keys) }
+    before { allow(API::Github).to receive(:pr).and_return(JSON.parse(json, symbolize_names: true)) }
     let(:json) { file_fixture('github/pr.json').read }
     let(:unfurl) do
       {

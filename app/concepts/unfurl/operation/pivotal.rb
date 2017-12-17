@@ -42,22 +42,15 @@ class Unfurl::Pivotal < Trailblazer::Operation
   end
 
   def story_color(state)
-    case state
-    when 'unscheduled'
-      'e4eff7'
-    when 'unstarted'
-      'ffffff'
-    when 'started'
-      'e0e2e5'
-    when 'finished'
-      '203e64'
-    when 'delivered'
-      'f39300'
-    when 'accepted'
-      '629200'
-    when 'rejected'
-      'a71f39'
-    end
+    {
+      'unscheduled' => 'e4eff7',
+      'unstarted' => 'ffffff',
+      'started' => 'e0e2e5',
+      'finished' => '203e64',
+      'delivered' => 'f39300',
+      'accepted' => '629200',
+      'rejected' => 'a71f39'
+    }[state]
   end
 
   def public_url_meta(url)

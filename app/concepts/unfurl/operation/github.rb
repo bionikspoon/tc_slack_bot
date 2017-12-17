@@ -25,24 +25,6 @@ class Unfurl::Github < Trailblazer::Operation
   def private_pr_meta(owner, repo, number)
     meta = API::Github.pr(owner, repo, number)
     title = "#{meta[:title]} · Pull Request #{meta[:number]} · #{meta.dig(:head, :repo, :full_name)}"
-    changes = "+#{meta[:additions]} / -#{meta[:deletions]} / #{meta[:changed_files]} #{'file'.pluralize(meta[:changed_files])}"
-    fields = []
-
-    if meta[:state] == 'open'
-      fields << { title: 'Changes', value: changes, short: true }
-      fields << { title: 'Branch', value: "`#{meta.dig(:head, :ref)}`", short: true }
-    end
-
-    if owner.casecmp('thinkcerca').zero?
-      stories = pivotal_stories(meta[:title])
-      if stories.count.positive?
-        fields << {
-          title: 'Pivotal',
-          value: stories.join("\n"),
-          short: false
-        }
-      end
-    end
 
     {
       author_icon: meta.dig(:user, :avatar_url),
@@ -55,8 +37,8 @@ class Unfurl::Github < Trailblazer::Operation
       text: meta[:body],
       title_link: meta[:html_url],
       title: title,
-      fields: fields,
-      color: pr_color(meta)
+      fields: private_pr_fields(meta),
+      color: private_pr_color(meta)
     }
   end
 
@@ -64,17 +46,41 @@ class Unfurl::Github < Trailblazer::Operation
     title.scan(/[^#]*#(\d+)(?=[,\]\s])/).map { |story| "https://pivotaltracker.com/story/show/#{story[0]}" }
   end
 
-  def pr_color(meta)
+  def private_pr_color(meta)
     if meta[:merged]
       '6f42c1'
-    else
-      case meta[:state]
-      when 'open'
-        '2cbe4e'
-      when 'closed'
-        'cb2431'
-      end
+    elsif meta[:state] == 'open'
+      '2cbe4e'
+    elsif meta[:state] == 'closed'
+      'cb2431'
     end
+  end
+
+  def private_pr_fields(meta)
+    fields = []
+    stories = pivotal_stories(meta[:title])
+
+    if meta[:state] == 'open'
+      fields += [
+        {
+          title: 'Changes',
+          value: "+#{meta[:additions]} / -#{meta[:deletions]} / #{meta[:changed_files]} #{'file'.pluralize(meta[:changed_files])}",
+          short: true
+        },
+        {
+          title: 'Branch', value: "`#{meta.dig(:head, :ref)}`", short: true
+        }
+      ]
+    end
+    return fields unless
+      meta.dig(:base, :repo, :owner, :login).casecmp('thinkcerca').zero? &&
+      stories.count.positive?
+
+    fields << {
+      title: 'Pivotal',
+      value: stories.join("\n"),
+      short: false
+    }
   end
 
   def public_url_meta(url)

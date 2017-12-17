@@ -74,14 +74,12 @@ describe SiteMeta do
     let(:html) { file_fixture('github/pr.html').read }
 
     before do
-      response = double(body: html)
-      allow(HTTParty).to receive(:get).and_return(response)
+      allow(HTTParty).to receive(:get).and_return(instance_double(HTTParty::Response, body: html))
     end
+    after { described_class.from_url('https://github.com/react-toolbox/react-toolbox/pull/1719') }
 
     it "calls 'call' with html" do
       expect(described_class).to receive(:call).with(html)
-
-      described_class.from_url('https://github.com/react-toolbox/react-toolbox/pull/1719')
     end
   end
 end

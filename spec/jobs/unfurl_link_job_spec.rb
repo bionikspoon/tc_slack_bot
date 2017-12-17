@@ -20,8 +20,9 @@ describe UnfurlLinkJob, type: :job do
     }
   end
 
+  after { described_class.perform_now(params) }
+
   it 'sends job to Unfurl::Dispatch' do
     expect(Unfurl::Dispatch).to receive(:call).with(params)
-    UnfurlLinkJob.perform_now(params)
   end
 end

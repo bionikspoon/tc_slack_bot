@@ -24,3 +24,18 @@ Metrics/BlockLength:
     - describe
 Style/ClassAndModuleChildren:
   EnforcedStyle: compact
+  Exclude:
+    - 'config/application.rb'
+RSpec/MessageSpies:
+  EnforcedStyle: receive
+Style/Documentation:
+  Enabled: false
+RSpec/FilePath:
+  Exclude:
+    - 'spec/concepts/action/operation/challenge_spec.rb'
+    - 'spec/concepts/action/operation/link_shared_spec.rb'
+    - 'spec/concepts/action/operation/unknown_spec.rb'
+    - 'spec/concepts/event/operation/handle_spec.rb'
+    - 'spec/concepts/unfurl/operation/dispatch_spec.rb'
+    - 'spec/concepts/unfurl/operation/github_spec.rb'
+    - 'spec/concepts/unfurl/operation/pivotal_spec.rb'
