@@ -1,4 +1,6 @@
-# README
+# TC Slack Bot
+
+[![Build Status](https://travis-ci.org/bionikspoon/tc_slack_bot.svg?branch=master)](https://travis-ci.org/bionikspoon/tc_slack_bot)
 
 This README would normally document whatever steps are necessary to get the
 application up and running.
