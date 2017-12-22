@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+rackup DefaultRackup
 # Puma can serve each request in a thread from an internal thread pool.
 # The `threads` method setting takes two numbers: a minimum and maximum.
 # Any libraries that use thread pools should be configured to match
@@ -23,7 +24,7 @@ environment ENV.fetch('RAILS_ENV') { 'development' }
 # Workers do not work on JRuby or Windows (both of which do not support
 # processes).
 #
-# workers ENV.fetch("WEB_CONCURRENCY") { 2 }
+workers ENV.fetch('WEB_CONCURRENCY') { 2 }
 
 # Use the `preload_app!` method when specifying a `workers` number.
 # This directive tells Puma to first boot the application and load code
@@ -31,8 +32,8 @@ environment ENV.fetch('RAILS_ENV') { 'development' }
 # process behavior so workers use less memory. If you use this option
 # you need to make sure to reconnect any threads in the `on_worker_boot`
 # block.
-#
-# preload_app!
+
+preload_app!
 
 # Allow puma to be restarted by `rails restart` command.
 plugin :tmp_restart
