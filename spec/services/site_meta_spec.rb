@@ -51,7 +51,7 @@ describe SiteMeta do
 
     test_extraction(
       'pivotal/index.html',
-      description: "Pivotal Tracker: The awesome, lightweight, agile project management tool for software teams. Get your 30-day Free Trial started today!\n",
+      description: 'Pivotal Tracker: The awesome, lightweight, agile project management tool for software teams. Get your 30-day Free Trial started today!',
       image: 'https://www.pivotaltracker.com/marketing_assets/tracker-1-445dc92b9bf372cdab2d97b0a032866e7d1e1cc9565060e223c56d27292a6973.png',
       type: 'website',
       title: 'Agile Project Management',

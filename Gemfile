@@ -27,6 +27,7 @@ gem 'puma', '~> 3.7'
 # gem 'rack-cors'
 
 gem 'httparty'
+gem 'sucker_punch'
 gem 'trailblazer'
 gem 'trailblazer-rails'
 
@@ -37,6 +38,7 @@ group :development, :test do
   gem 'pry-rails'
   gem 'rspec-its'
   gem 'rspec-rails'
+  gem 'webmock'
 end
 
 group :development do

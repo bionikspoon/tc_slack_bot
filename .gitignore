@@ -19,3 +19,5 @@
 
 .byebug_history
 .envrc
+
+spec/examples.txt
