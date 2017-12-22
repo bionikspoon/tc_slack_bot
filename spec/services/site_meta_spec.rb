@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 describe SiteMeta do
-  describe 'call' do
+  describe '#call' do
     def self.test_extraction(fixture, expected)
       context "when converting meta data to a hash [#{fixture}]" do
         subject { described_class.call(html) }
@@ -70,7 +70,7 @@ describe SiteMeta do
     )
   end
 
-  describe 'from_url' do
+  describe '#from_url' do
     let(:html) { file_fixture('github/pr.html').read }
 
     before do

@@ -7,6 +7,8 @@ describe 'Events', type: :request do
   describe 'POST /events' do
     subject { response }
 
+    before { post events_path, params: params }
+
     let(:params) do
       {
         token: 'secret',
@@ -14,8 +16,6 @@ describe 'Events', type: :request do
         type: 'url_verification'
       }
     end
-
-    before { post events_path, params: params }
 
     it { is_expected.to have_http_status(:ok) }
   end
