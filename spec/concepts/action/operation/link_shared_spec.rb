@@ -31,7 +31,7 @@ describe Action::LinkShared do
     context 'with subject' do
       subject { described_class.call(params) }
 
-      before { allow(UnfurlLinkJob).to receive(:perform_later) }
+      before { allow(UnfurlLinkJob).to receive(:perform_async) }
 
       it { is_expected.to be_success }
       its([:json]) { is_expected.to eq(status: :ok) }
@@ -41,29 +41,32 @@ describe Action::LinkShared do
     context 'with UnfurlLinkJob mock' do
       after { described_class.call(params) }
 
-      let(:job_params) do
+      let(:job_params_1) do
         {
           channel: 'Cxxxxxx',
           ts: '123456789.9875',
-          links: [
-            {
-              domain: 'example.com',
-              url: 'https://example.com/12345'
-            },
-            {
-              domain: 'example.com',
-              url: 'https://example.com/67890'
-            },
-            {
-              domain: 'another-example.com',
-              url: 'https://yet.another-example.com/v/abcde'
-            }
-          ]
+          links: [{ domain: 'example.com', url: 'https://example.com/12345' }]
+        }
+      end
+      let(:job_params_2) do
+        {
+          channel: 'Cxxxxxx',
+          ts: '123456789.9875',
+          links: [{ domain: 'example.com', url: 'https://example.com/67890' }]
+        }
+      end
+      let(:job_params_3) do
+        {
+          channel: 'Cxxxxxx',
+          ts: '123456789.9875',
+          links: [{ domain: 'another-example.com', url: 'https://yet.another-example.com/v/abcde' }]
         }
       end
 
       it 'queues all urls' do
-        expect(UnfurlLinkJob).to receive(:perform_later).with(job_params)
+        expect(UnfurlLinkJob).to receive(:perform_async).with(job_params_1)
+        expect(UnfurlLinkJob).to receive(:perform_async).with(job_params_2)
+        expect(UnfurlLinkJob).to receive(:perform_async).with(job_params_3)
       end
     end
   end

@@ -45,7 +45,7 @@ describe Event::Handle do
     end
 
     describe 'link_shared' do
-      before { allow(UnfurlLinkJob).to receive(:perform_later) }
+      before { allow(UnfurlLinkJob).to receive(:perform_async) }
 
       let(:params) do
         ActionController::Parameters.new(
@@ -79,21 +79,10 @@ describe Event::Handle do
         )
       end
 
-      let(:job_params) do
-        { channel: 'Cxxxxxx',
-          ts: '123456789.9875',
-          links: [
-            { domain: 'example.com', url: 'https://example.com/12345' },
-            { domain: 'example.com', url: 'https://example.com/67890' },
-            { domain: 'another-example.com',
-              url: 'https://yet.another-example.com/v/abcde' }
-          ] }
-      end
-
       it { is_expected.to be_success }
 
       it 'queues a job' do
-        expect(UnfurlLinkJob).to receive(:perform_later).with(job_params)
+        expect(UnfurlLinkJob).to receive(:perform_async).exactly(3).times
 
         subject # rubocop:disable RSpec/NamedSubject
       end

@@ -1,10 +1,17 @@
 # frozen_string_literal: true
 
 class Unfurl::Dispatch < Trailblazer::Operation
+  success :log!
   step :unfurl_each!
   step :process_unfurls!
   step :set_body!
   step :update_slack!
+
+  def log!(_options, params:, **)
+    links = params[:links].map { |link| link[:url] }
+
+    Rails.logger.info("[Unfurling] #{links.join(', ')}")
+  end
 
   def unfurl_each!(options, params:, **)
     options[:unfurl_pairs] = params[:links].map do |link|
