@@ -38,8 +38,12 @@ group :development, :test do
   gem 'awesome_print'
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
   gem 'pry-rails'
+end
+
+group :test do
   gem 'rspec-its'
   gem 'rspec-rails'
+  gem 'simplecov', require: false
   gem 'webmock'
 end
 

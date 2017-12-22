@@ -61,6 +61,7 @@ GEM
       declarative-option (< 0.2.0)
       representable (>= 2.4.0, <= 3.1.0)
       uber (< 0.2.0)
+    docile (1.1.5)
     erubi (1.7.0)
     ffi (1.9.18)
     formatador (0.2.5)
@@ -85,6 +86,7 @@ GEM
       multi_xml (>= 0.5.2)
     i18n (0.9.1)
       concurrent-ruby (~> 1.0)
+    json (2.1.0)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -199,6 +201,11 @@ GEM
     ruby_dep (1.5.0)
     safe_yaml (1.0.4)
     shellany (0.0.1)
+    simplecov (0.15.1)
+      docile (~> 1.1.0)
+      json (>= 1.8, < 3)
+      simplecov-html (~> 0.10.0)
+    simplecov-html (0.10.2)
     spring (2.0.2)
       activesupport (>= 4.2)
     spring-commands-rspec (1.0.4)
@@ -261,6 +268,7 @@ DEPENDENCIES
   rspec-rails
   rubocop (~> 0.51.0)
   rubocop-rspec
+  simplecov
   spring
   spring-commands-rspec
   spring-commands-rubocop

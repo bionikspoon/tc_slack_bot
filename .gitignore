@@ -21,3 +21,4 @@
 .envrc
 
 spec/examples.txt
+coverage/
