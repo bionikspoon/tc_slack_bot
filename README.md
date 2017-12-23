@@ -21,3 +21,10 @@ In slack's lingo, this bot `unfurls` urls. Unfurling is the process of getting m
 This bot is a webhook server subscribed to slack's `link_shared` event.
 
 Upon retrieving a shared link it queues an [UnfurlLinkJob](./app/jobs/unfurl_link_job.rb) job. This job fetches the linked resource using public apis with proper auth headers and publishes the results to slack's api.
+
+I was interested in playing with [trailblazer.to](trailblazer.to). Most everything is happening trailblazer pipes.
+
+## Screen Shots
+
+![github screen shot](./screens/github.png)
+![pivotal screen shot](./screens/pivotal.png)
