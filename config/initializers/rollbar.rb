@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rollbar/logger'
 
 Rails.logger.extend(ActiveSupport::Logger.broadcast(Rollbar::Logger.new))
@@ -9,9 +11,7 @@ Rollbar.configure do |config|
   config.access_token = ENV['ROLLBAR_ACCESS_TOKEN']
 
   # Here we'll disable in 'test':
-  if Rails.env.test?
-    config.enabled = false
-  end
+  config.enabled = false if Rails.env.test?
 
   # By default, Rollbar will try to call the `current_user` controller method
   # to fetch the logged-in user object, and then call that object's `id`,

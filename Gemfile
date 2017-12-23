@@ -28,14 +28,14 @@ gem 'puma', '~> 3.7'
 # gem 'rack-cors'
 
 gem 'httparty'
+gem 'oj'
 gem 'rack-timeout'
+gem 'rollbar'
 gem 'rubocop', '~> 0.51.0', require: false
 gem 'rubocop-rspec', require: false
 gem 'sucker_punch'
 gem 'trailblazer'
 gem 'trailblazer-rails'
-gem 'rollbar'
-gem 'oj'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
