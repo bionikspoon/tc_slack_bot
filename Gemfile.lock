@@ -40,9 +40,6 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
-    airbrake (7.1.1)
-      airbrake-ruby (~> 2.5)
-    airbrake-ruby (2.7.0)
     arel (8.0.0)
     ast (2.3.0)
     awesome_print (1.8.0)
@@ -258,7 +255,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  airbrake
   awesome_print
   byebug
   guard-rspec
