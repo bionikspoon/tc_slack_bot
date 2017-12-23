@@ -3,7 +3,7 @@
 require 'sucker_punch/testing/inline'
 require 'webmock/rspec'
 
-if ENV['CI'].downcase == 'true'
+if ENV.fetch('CI', '').casecmp('true').zero?
   require 'simplecov'
   SimpleCov.start 'rails'
 end
