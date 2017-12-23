@@ -1,0 +1,63 @@
+{
+  "name": "tc_slack_bot",
+  "scripts": {},
+  "env": {
+    "AIRBRAKE_API_KEY": {
+      "required": true
+    },
+    "AIRBRAKE_PROJECT_ID": {
+      "required": true
+    },
+    "GITHUB_TOKEN": {
+      "required": true
+    },
+    "GITHUB_USER": {
+      "required": true
+    },
+    "LANG": {
+      "required": true
+    },
+    "LOGDNA_KEY": {
+      "required": true
+    },
+    "PIVOTAL_TOKEN": {
+      "required": true
+    },
+    "RACK_ENV": {
+      "required": true
+    },
+    "RAILS_ENV": {
+      "required": true
+    },
+    "RAILS_LOG_TO_STDOUT": {
+      "required": true
+    },
+    "RAILS_SERVE_STATIC_FILES": {
+      "required": true
+    },
+    "SECRET_KEY_BASE": {
+      "required": true
+    },
+    "SLACK_OAUTH_TOKEN": {
+      "required": true
+    },
+    "SLACK_TOKEN": {
+      "required": true
+    }
+  },
+  "formation": {
+    "worker": {
+      "quantity": 1
+    },
+    "web": {
+      "quantity": 1
+    }
+  },
+  "addons": ["airbrake", "logdna", "sumologic"],
+  "buildpacks": [
+    {
+      "url": "heroku/ruby"
+    }
+  ]
+}
+
