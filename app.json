@@ -2,12 +2,6 @@
   "name": "tc_slack_bot",
   "scripts": {},
   "env": {
-    "AIRBRAKE_API_KEY": {
-      "required": true
-    },
-    "AIRBRAKE_PROJECT_ID": {
-      "required": true
-    },
     "GITHUB_TOKEN": {
       "required": true
     },
@@ -35,6 +29,9 @@
     "RAILS_SERVE_STATIC_FILES": {
       "required": true
     },
+    "ROLLBAR_ACCESS_TOKEN": {
+      "required": true
+    },
     "SECRET_KEY_BASE": {
       "required": true
     },
@@ -53,11 +50,10 @@
       "quantity": 1
     }
   },
-  "addons": ["airbrake", "logdna", "sumologic"],
+  "addons": ["logdna", "sumologic"],
   "buildpacks": [
     {
       "url": "heroku/ruby"
     }
   ]
 }
-
