@@ -27,9 +27,12 @@ gem 'puma', '~> 3.7'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'
 
-gem 'airbrake'
 gem 'httparty'
+gem 'oj'
 gem 'rack-timeout'
+gem 'rollbar'
+gem 'rubocop', '~> 0.51.0', require: false
+gem 'rubocop-rspec', require: false
 gem 'sucker_punch'
 gem 'trailblazer'
 gem 'trailblazer-rails'
@@ -52,8 +55,7 @@ group :development do
   gem 'listen', '>= 3.0.5', '< 3.2'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'guard-rspec', require: false
-  gem 'rubocop', '~> 0.51.0', require: false
-  gem 'rubocop-rspec', require: false
+
   gem 'spring'
   gem 'spring-commands-rspec'
   gem 'spring-commands-rubocop'
