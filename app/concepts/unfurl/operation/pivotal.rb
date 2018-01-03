@@ -13,6 +13,8 @@ class Unfurl::Pivotal < Trailblazer::Operation
     case URI(url).path
     when %r{/story/show/(?<story>\d+)}i
       private_story_meta($LAST_MATCH_INFO['story'])
+    when %r{/n/projects/\d+/stories/(?<story>\d+)}i
+      private_story_meta($LAST_MATCH_INFO['story'])
     else
       public_url_meta(url)
     end
